@@ -103,8 +103,8 @@ class SnakeEnv:
 
         # snake
         snake_length = len(self.snake)
-        for i, segment in enumerate(self.snake):
-            grids[0][segment] = 1 / (snake_length - i)
+        for i, segment in enumerate(self.snake, start=1):
+            grids[0][segment] = i / snake_length
 
         # food
         if self.food:
