@@ -58,14 +58,16 @@ class QNet(nn.Module):
         self.num_actions = num_actions
         self.device = device
         self.layers = nn.Sequential(
-            nn.Conv2d(2,  16, kernel_size=3),
+            nn.Conv2d(2,  32, kernel_size=2),
             nn.ReLU(),
-            nn.Conv2d(16, 32, kernel_size=3),
+            nn.Conv2d(32, 32, kernel_size=2),
             nn.ReLU(),
             nn.Flatten(),
-            nn.Linear(32 * (n - 4) * (m - 4), 64),
+            nn.Linear(32 * (n - 2) * (m - 2), 64),
             nn.ReLU(),
-            nn.Linear(64, num_actions)
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, num_actions)
         )
         self.to(device)
 
