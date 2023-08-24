@@ -103,6 +103,7 @@ class SnakeEnv:
 
         # snake
         snake_length = len(self.snake)
+        grids[0] += -1
         for i, segment in enumerate(self.snake, start=1):
             grids[0][segment] = i / snake_length
 
