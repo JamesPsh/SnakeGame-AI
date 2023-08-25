@@ -130,6 +130,7 @@ def train():
 
     memory = ReplayBuffer(device)
     optimizer = optim.Adam(q.parameters(), lr=LEARNING_RATE)
+    max_score = -1
 
     for n_epi in range(NUM_EPISODES):
 
@@ -145,13 +146,16 @@ def train():
                 memory.put((s, m, [a], [r / 1.0], s_prime, m_prime, [int(not done)]))
                 s, m = s_prime, m_prime
                 score += r > 0
+
+        if score >= max_score:
+            max_score = score
+            torch.save(q.state_dict(), WEIGHT_PATH)
             
         if len(memory) > 10000:
             train_model(q, q_target, memory, optimizer)
 
         if n_epi % 20 == 0:
             q_target.load_state_dict(q.state_dict())
-            torch.save(q.state_dict(), WEIGHT_PATH)
             print(f"n_episode: {n_epi}, score: {score:.1f}, n_buffer: {len(memory)}, eps: {epsilon * 100:.1f}%")
 
     env.close()
