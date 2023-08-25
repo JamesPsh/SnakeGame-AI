@@ -76,8 +76,10 @@ class SnakeEnv:
                          (self.food[1] * cell_size, self.food[0] * cell_size, cell_size, cell_size))
 
         # Draw snake
-        for segment in self.snake:
-            pygame.draw.rect(self.window, (0, 0, 0),
+        snake_length = len(self.snake)
+        for i, segment in enumerate(self.snake):
+            color_intensity = min((snake_length - i) / snake_length, 0.5) * 255
+            pygame.draw.rect(self.window, (color_intensity, color_intensity, color_intensity),
                              (segment[1] * cell_size, segment[0] * cell_size, cell_size, cell_size))
 
         pygame.display.flip()
