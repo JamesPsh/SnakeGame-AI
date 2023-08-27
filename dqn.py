@@ -79,7 +79,9 @@ class QNet(nn.Module):
 
     def _to_tensor(self, x):
         if x is not None:
-            x = torch.from_numpy(x[np.newaxis, :]).to(self.device)
+            x = x[np.newaxis, :]
+            x = torch.from_numpy(x)
+            x = x.to(self.device)
         return x
 
     def get_values(self, obs, mask=None, print_values=False):
