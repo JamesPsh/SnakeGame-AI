@@ -1,5 +1,7 @@
 # SnakeGame-AI
 
+This repository was created for the purpose of studying AI.
+
 ## How to use
 
 - To train the model
