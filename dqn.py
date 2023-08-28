@@ -184,7 +184,7 @@ def play():
             m = info.get('mask', np.ones(4)) if USE_ACTION_MASK else np.ones(4)
             score += r > 0
             env.render()
-            time.sleep(0.01)
+            time.sleep(0.05)
 
     env.close()
     print(f'score: {score}')
