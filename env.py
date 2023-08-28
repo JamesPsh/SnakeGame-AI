@@ -48,7 +48,7 @@ class SnakeEnv:
         else:
             self.snake.popleft()
             self.steps_without_food += 1
-            reward = -1 / threshold / 2
+            reward = 0
 
         done = self.steps_without_food > threshold
         mask = self._calculate_mask()

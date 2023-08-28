@@ -13,10 +13,10 @@ import torch.optim as optim
 from env import SnakeEnv
 
 # Hyperparameters
-LEARNING_RATE   = 0.0001
-GAMMA           = 0.95
+LEARNING_RATE   = 0.0005
+GAMMA           = 0.99
 BUFFER_LIMIT    = 50000
-BATCH_SIZE      = 32
+BATCH_SIZE      = 64
 GRID_SIZE       = (10, 10)
 NUM_EPISODES    = 500000
 NUM_ACTIONS     = 4
@@ -136,7 +136,7 @@ def train():
 
     for n_epi in range(NUM_EPISODES):
 
-        epsilon = max(0.0001, 0.30 - 0.01 * (n_epi / 10000))
+        epsilon = max(0.0001, 0.20 - 0.01 * (n_epi / 10000))
         s, m, done = env.reset(), np.ones(4), False
         score = 0
 
