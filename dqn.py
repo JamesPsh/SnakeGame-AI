@@ -14,7 +14,7 @@ from env import SnakeEnv
 
 # Hyperparameters
 LEARNING_RATE   = 0.0005
-GAMMA           = 0.99
+GAMMA           = 0.995
 BUFFER_LIMIT    = 50000
 BATCH_SIZE      = 64
 GRID_SIZE       = (10, 10)
