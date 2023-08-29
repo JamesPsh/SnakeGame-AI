@@ -44,7 +44,7 @@ class ReplayBuffer:
             torch.tensor(r_lst, dtype=torch.float).to(self.device),
             torch.tensor(s_prime_lst, dtype=torch.float).to(self.device),
             torch.tensor(m_prime_lst, dtype=torch.int).to(self.device),
-            torch.tensor(done_mask_lst, dtype=torch.int).to(self.device)
+            torch.tensor(done_mask_lst, dtype=torch.float).to(self.device)
         )
 
     def __len__(self):
@@ -145,7 +145,7 @@ def train():
                 a = q.sample_action(s, m, epsilon)
                 s_prime, r, done, info = env.step(a)
                 m_prime = info.get('mask', np.ones(4)) if USE_ACTION_MASK else np.ones(4)
-                memory.put((s, m, [a], [r / 1.0], s_prime, m_prime, [int(not done)]))
+                memory.put((s, m, [a], [r / 1.0], s_prime, m_prime, [float(not done)]))
                 s, m = s_prime, m_prime
                 score += r > 0
 
