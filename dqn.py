@@ -93,8 +93,9 @@ class QNet(nn.Module):
 
     def sample_action(self, obs, mask=None, epsilon=-1, print_values=False):
         if random.random() < epsilon:
-            mask = np.ones(self.num_actions) if mask is None else mask
-            valid_actions = [a for a in range(self.num_actions) if mask[a]]
+            valid_actions = list(range(self.num_actions))
+            if mask is not None:
+                valid_actions = [a for a in valid_actions if mask[a]]
             return random.choice(valid_actions)
         else:
             out = self.get_values(obs, mask, print_values)
