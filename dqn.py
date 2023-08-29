@@ -124,7 +124,7 @@ def train_model(q, q_target, memory, optimizer):
 
 def train():
 
-    env = SnakeEnv(grid_size=GRID_SIZE)
+    env = SnakeEnv(grid_size=GRID_SIZE, use_action_mask=USE_ACTION_MASK)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     q = QNet(GRID_SIZE, NUM_ACTIONS, device)
@@ -145,7 +145,7 @@ def train():
             while not done:
                 a = q.sample_action(s, m, epsilon)
                 s_prime, r, done, info = env.step(a)
-                m_prime = info.get('mask', np.ones(4)) if USE_ACTION_MASK else np.ones(4)
+                m_prime = info['mask']
                 memory.put((s, m, [a], [r / 1.0], s_prime, m_prime, [float(not done)]))
                 s, m = s_prime, m_prime
                 score += r > 0
@@ -174,7 +174,7 @@ def play():
     q.load_state_dict(torch.load(WEIGHT_PATH))
     q.eval()
 
-    env = SnakeEnv(grid_size=GRID_SIZE, gui=True)
+    env = SnakeEnv(grid_size=GRID_SIZE, use_action_mask=USE_ACTION_MASK, gui=True)
     s, m, done, score = env.reset(), np.ones(4), False, 0
     epsilon = 0
 
@@ -182,7 +182,7 @@ def play():
         while not done:
             a = q.sample_action(s, m, epsilon, True)
             s, r, done, info = env.step(a)
-            m = info.get('mask', np.ones(4)) if USE_ACTION_MASK else np.ones(4)
+            m = info['mask']
             score += r > 0
             env.render()
             time.sleep(0.05)

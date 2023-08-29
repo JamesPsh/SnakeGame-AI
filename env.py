@@ -7,9 +7,10 @@ from collections import deque
 class SnakeEnv:
     ACTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
 
-    def __init__(self, grid_size=(10, 10), window_size=(300, 300), gui=False):
+    def __init__(self, grid_size=(10, 10), window_size=(300, 300), use_action_mask=False, gui=False):
         self.grid_size = grid_size
         self.window_size = window_size
+        self.use_action_mask = use_action_mask
         self.gui = gui
         self.reset()
         if self.gui:
@@ -30,13 +31,14 @@ class SnakeEnv:
 
     def step(self, action):
 
+        mask = np.ones(4)
         if self.done:
-            return self._get_observation(), 0, True, {}
+            return self._get_observation(), 0, True, {'mask': mask}
 
         new_head = self._calculate_new_head(action)
         if not self._is_valid_position(new_head):
             self.done = True
-            return self._get_observation(), -10, True, {}
+            return self._get_observation(), -10, True, {'mask': mask}
 
         self.snake.append(new_head)
         threshold = self.grid_size[0] * self.grid_size[1]
@@ -51,8 +53,9 @@ class SnakeEnv:
             reward = 0
 
         done = self.steps_without_food > threshold
-        mask = self._calculate_mask()
-        if not any(mask):
+        if self.use_action_mask:
+            mask = self._calculate_mask()
+        if not np.any(mask):
             done = True
             reward = -10
             mask = np.ones(4)
